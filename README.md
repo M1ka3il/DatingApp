@@ -9,7 +9,7 @@
 
 ---
 
-> 🚧 **This project is a work in progress. Features are being implemented step by step as part of my self .NET FullStack Journey**
+> 🚧 **This project is a work in progress. Features are being implemented step by step as part of my self tought .NET FullStack Journey**
 
 ## ✅ Project Checklist
 
