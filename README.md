@@ -14,11 +14,11 @@
 ## ✅ Project Checklist
 
 - [x] Project setup (.NET & Angular CLI)
-- [x] User registration and JWT authentication
-- [x] Basic user profile UI
-- [x] API integration between Angular and .NET Core
-- [x] AutoMapper configuration
-- [x] Entity Framework Core setup with code-first migrations
+- [ ] User registration and JWT authentication
+- [ ] Basic user profile UI
+- [ ] API integration between Angular and .NET Core
+- [ ] AutoMapper configuration
+- [ ] Entity Framework Core setup with code-first migrations
 - [ ] Photo upload with drag & drop (Cloud integration)
 - [ ] Private messaging system
 - [ ] Real-time presence and messaging with SignalR
