@@ -42,8 +42,8 @@
 
 ## 🚀 Features (planned & implemented)
 
-- ✅ Authentication using JWT tokens  
-- ✅ DTO mapping with AutoMapper  
+- 🔜 Authentication using JWT tokens  
+- 🔜 DTO mapping with AutoMapper  
 - 🔜 Drag & drop photo upload to cloud storage  
 - 🔜 Private messaging system  
 - 🔜 Real-time notifications and presence (SignalR)  
