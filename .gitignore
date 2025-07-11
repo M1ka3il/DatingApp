@@ -1,0 +1,20 @@
+## Build-Ordner
+bin/
+obj/
+
+## User-spezifische Dateien
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Temporäre Dateien
+*.tmp
+*.log
+
+## Visual Studio Code
+.vscode/
+
+## Mac & Windows system files
+.DS_Store
+Thumbs.db
