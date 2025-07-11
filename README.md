@@ -40,7 +40,7 @@
 
 ---
 
-## 🚀 Features (planned & implemented)
+## 🚀 Features (planned)
 
 - 🔜 Authentication using JWT tokens  
 - 🔜 DTO mapping with AutoMapper  
