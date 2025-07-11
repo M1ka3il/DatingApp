@@ -36,7 +36,7 @@
 - **Database**: Entity Framework Core (Code First)
 - **Real-time**: SignalR
 - **Cloud**: Drag & drop image upload
-- **IDE**: Visual Studio Code
+- **IDE**: Visual Studio Code or Visual Studio (depending on my working location)
 
 ---
 
