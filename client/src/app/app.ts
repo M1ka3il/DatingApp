@@ -12,15 +12,16 @@ import { RouterOutlet } from '@angular/router';
 
 export class App implements OnInit{
   private http = inject(HttpClient);
-
-protected title = 'Dating App';
-ngOnInit(): void {
-  this.http.get('https://localhost:5001/api/members').subscribe({
-    next: response =>  console.log(response),
-    error: error =>  console.log(error),
-    complete: () => { console.log('Request completed')} 
-  })
-}
+  protected title = 'Dating App';
+  protected AppUser = signal<any>([]);;
+  
+  ngOnInit(): void {
+    this.http.get('https://localhost:5001/api/members').subscribe({
+      next: response =>  this.AppUser.set(response),
+      error: error =>  console.log(error),
+      complete: () => { console.log('Request completed')} 
+    })
+  }
 
 
 }
