@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -15,13 +16,18 @@ export class App implements OnInit{
   protected title = 'Dating App';
   protected AppUser = signal<any>([]);;
   
-  ngOnInit(): void {
-    this.http.get('https://localhost:5001/api/members').subscribe({
-      next: response =>  this.AppUser.set(response),
-      error: error =>  console.log(error),
-      complete: () => { console.log('Request completed')} 
-    })
+  async ngOnInit() {
+    this.AppUser.set(await this.getMembers());
   }
 
+async getMembers(){
+  try{
+    return lastValueFrom(this.http.get('https://localhost:5001/api/members'));
+  } catch (error) {
+    console.error('Error fetching members:', error);
+    throw error;
+  }
+
+}
 
 }
