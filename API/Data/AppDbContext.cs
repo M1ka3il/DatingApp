@@ -17,6 +17,6 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<AppUser>().HasKey(u => u.Id);
         modelBuilder.Entity<AppUser>().Property(u => u.UserName).IsRequired();
-        modelBuilder.Entity<AppUser>().Property(u => u.EMail).IsRequired();
+        modelBuilder.Entity<AppUser>().Property(u => u.Email).IsRequired();
     }
 }
