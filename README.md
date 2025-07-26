@@ -5,7 +5,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-4.x-blue?logo=typescript&logoColor=white)
 ![SignalR](https://img.shields.io/badge/SignalR-Real--Time-green?logo=signal&logoColor=white)
 ![Entity Framework Core](https://img.shields.io/badge/Entity%20Framework-Core%208.0-blue?logo=database&logoColor=white)
-![License: Educational](https://img.shields.io/badge/license-Educational-yellow)
+![License: MIT](https://img.shields.io/badge/license-MIT-yellow)
 
 ---
 
