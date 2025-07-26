@@ -19,5 +19,13 @@ obj/
 *.log
 *.tmp
 
+# Local configuration files
+*.local
+
+# Backup files
+*.bak
+
 API/appsettings.json
 API/dating.db*
+.github/*
+
