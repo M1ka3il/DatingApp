@@ -1,6 +1,7 @@
 using System;
 using System.Security.Cryptography;
 using API.Data;
+using API.DTO;
 using API.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,20 @@ public class AccountController(AppDbContext context) : BaseAPIController
       UserName = username.ToLower(),
       Email = email.ToLower(),
       PasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password)),
+      PasswordSalt = hmac.Key
+    };
+    return user;
+  }
+  public async Task<ActionResult<AppUser>> Register(RegisterDTO registerDTO)
+  {
+    if (await UserExists(registerDTO.Username)) return BadRequest("Username is taken");
+    if (await EmailExists(registerDTO.Email)) return BadRequest("Email is taken");
+    using var hmac = new HMACSHA512();
+    var user = new AppUser
+    {
+      UserName = registerDTO.Username.ToLower(),
+      Email = registerDTO.Email.ToLower(),
+      PasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(registerDTO.Password)),
       PasswordSalt = hmac.Key
     };
     return user;
