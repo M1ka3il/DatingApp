@@ -17,7 +17,7 @@ public class AccountController(AppDbContext context) : BaseAPIController
     if (await EmailExists(registerDTO.Email)) return BadRequest("Email is taken");
     using var hmac = new HMACSHA512();
     var user = new AppUser
-    {
+    /*  */{
       UserName = registerDTO.Username.ToLower(),
       Email = registerDTO.Email.ToLower(),
       PasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(registerDTO.Password)),
