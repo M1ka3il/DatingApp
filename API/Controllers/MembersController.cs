@@ -1,11 +1,13 @@
 using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
 
+    [Authorize]
     public class MembersController(AppDbContext context) : BaseAPIController
     {
         #region "User"
@@ -15,6 +17,7 @@ namespace API.Controllers
             var members = await context.Users.ToListAsync();
             return members;
         }
+
 
         [HttpGet("{id}")]  //localhost:5001/api/members/jane-id
         public async Task<ActionResult<AppUser>> GetMemberByID(string id)
