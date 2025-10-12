@@ -11,8 +11,12 @@ public class TokenService(IConfiguration config) : ITokenService
 {
   public string CreateToken(AppUser user)
   {
-    var tokenKey = config["TokenKey"] ?? throw new Exception("TokenKey is missing");
-    if (tokenKey?.Length < 64)
+    var tokenKey = config["TokenKey"];
+    if (string.IsNullOrEmpty(tokenKey))
+    {
+      throw new Exception("TokenKey is missing");
+    }
+    if (tokenKey.Length < 64)
     {
       throw new Exception("TokenKey must be at least 64 characters long");
     }
