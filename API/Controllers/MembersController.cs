@@ -11,6 +11,7 @@ namespace API.Controllers
     public class MembersController(AppDbContext context) : BaseAPIController
     {
         #region "User"
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<AppUser>>> GetMembers()
         {
@@ -18,9 +19,9 @@ namespace API.Controllers
             return members;
         }
 
-
+        [AllowAnonymous]
         [HttpGet("{id}")]  //localhost:5001/api/members/jane-id
-        public async Task<ActionResult<AppUser>> GetMemberByID(string id)
+        public async Task<ActionResult<AppUser>> GetMemberByID(Guid id)
         {
             var member = await context.Users.FindAsync(id);
             if (member == null)
