@@ -16,7 +16,7 @@ public class MembersControllerTests
         return new AppDbContext(options);
     }
 
-    private static AppUser CreateUser(Guid? id = null)
+    private AppUser CreateUser(Guid? id = null)
     {
         return new AppUser
         {
@@ -27,6 +27,7 @@ public class MembersControllerTests
             PasswordSalt = new byte[] { 4, 5, 6 }
         };
     }
+
 
     [Fact]
     public async Task GetMembers_ReturnsAllUsers()
