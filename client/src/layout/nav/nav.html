@@ -14,7 +14,20 @@
     <a>Messages</a>
   </nav>
   <div class="flex align-middle ml-auto gap-3">
-    <form #loginForm="ngForm" (ngSubmit)="login()" class="flex items-center gap-3" (ngSubmit)="login()">
+    @if(loggedIn()){
+      <div class="dropdown-end">
+        <div tabindex="0" role="button" 
+        class="flex items-center text-white text-xl gap-3 cursor-pointer">
+          <img src="assets/user.png" alt="User Avatar" class="w-8 h-8 rounded-full">
+          <span>User</span>
+        </div>
+        <ul tabindex="-1" class="dropdown-content  menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+          <li><a>Edit Profile</a></li>
+          <li><a (click)="logout()">Logout</a></li>
+        </ul>
+      </div>
+    } @else {
+  <form #loginForm="ngForm" (ngSubmit)="login()" class="flex items-center gap-3" (ngSubmit)="login()">
       <input 
         [(ngModel)]="creds.mail" 
         name="mail"
@@ -28,8 +41,8 @@
         class ="input" 
         placeholder="Password">
       <button type="submit" class="btn">Login</button>
-    </form>
-  </div>
-
+    </form>   
+    }
+    </div>
 </div>
 </header>
