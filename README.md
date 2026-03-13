@@ -14,7 +14,7 @@
 ## ✅ Project Checklist
 
 - [x] Project setup (.NET & Angular CLI)
-- [ ] User registration and JWT authentication
+- [X] User registration and JWT authentication
 - [ ] Basic user profile UI
 - [ ] API integration between Angular and .NET Core
 - [ ] AutoMapper configuration
