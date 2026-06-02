@@ -13,4 +13,3 @@ export class AccountService {
     return this.http.post(this.baseUrl + 'account/login', creds);
   }
 }
- 
