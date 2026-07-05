@@ -9,7 +9,7 @@
     <h3 class="text-2xl font-semibold text-white uppercase">Dating App</h3>
   </a>
   <nav class="flex gap-3 my-2 uppercase text-lg text-white">
-    <a>Matches</a>
+    <a routerLink="/members">Matches</a>
     <a>Lists</a>
     <a>Messages</a>
   </nav>
@@ -27,12 +27,12 @@
         </ul>
       </div>
     } @else {
-  <form #loginForm="ngForm" (ngSubmit)="login()" class="flex items-center gap-3" (ngSubmit)="login()">
-      <input 
-        [(ngModel)]="creds.mail" 
-        name="mail"
-        type="text" 
-        class ="input" 
+  <form #loginForm="ngForm" (ngSubmit)="login()" class="flex items-center gap-3">
+      <input
+        [(ngModel)]="creds.email"
+        name="email"
+        type="text"
+        class ="input"
         placeholder="Email">
       <input 
         [(ngModel)]="creds.password" 

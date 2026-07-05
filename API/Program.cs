@@ -17,6 +17,7 @@ builder.Services.AddDbContext<AppDbContext>( opt =>
 
 builder.Services.AddCors();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddAutoMapper(cfg => { }, typeof(Program).Assembly);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
