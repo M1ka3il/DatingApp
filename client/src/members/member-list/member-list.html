@@ -1,14 +1,80 @@
-<div class="card bg-base-100 w-1/2 mx-auto p-10 mt-24 shadow-xl">
-  <ul class="list">
-    @for(member of members(); track member.id) {
-      <li class="list-row items-center">
-        <a [routerLink]="['/members', member.id]" class="flex items-center gap-4 w-full">
-          <img [src]="member.imageUrl || '/male_defaultAvatar_vecteezy.jpg'" alt="user avatar" class="size-12 rounded-box">
-          <div>
-            {{member.userName}}
-          </div>
-        </a>
-      </li>
+<div class="w-2/3 mx-auto mt-24">
+  <!-- Filter / sort controls -->
+  <div class="card bg-base-100 p-4 shadow-xl mb-4 flex flex-row flex-wrap items-center gap-3">
+    <input
+      [(ngModel)]="userParams.search"
+      (keyup.enter)="search()"
+      type="text"
+      class="input input-bordered"
+      placeholder="Search username">
+    <button (click)="search()" class="btn btn-primary">Search</button>
+
+    <div class="join">
+      <button
+        (click)="setDirection('asc')"
+        class="btn join-item"
+        [class.btn-active]="userParams.direction === 'asc'">
+        A–Z
+      </button>
+      <button
+        (click)="setDirection('desc')"
+        class="btn join-item"
+        [class.btn-active]="userParams.direction === 'desc'">
+        Z–A
+      </button>
+    </div>
+
+    <button (click)="resetFilters()" class="btn btn-ghost ml-auto">Reset</button>
+  </div>
+
+  <!-- Member list -->
+  <div class="card bg-base-100 p-8 shadow-xl">
+    @if (members().length === 0) {
+      <p class="text-center opacity-70">No members found.</p>
+    } @else {
+      <ul class="list">
+        @for (member of members(); track member.id) {
+          <li class="list-row items-center">
+            <a [routerLink]="['/members', member.id]" class="flex items-center gap-4 w-full">
+              <img [src]="member.imageUrl || '/male_defaultAvatar_vecteezy.jpg'" alt="user avatar" class="size-12 rounded-box">
+              <div>{{ member.userName }}</div>
+            </a>
+          </li>
+        }
+      </ul>
     }
-  </ul>
+  </div>
+
+  <!-- Pagination -->
+  @if (pagination(); as p) {
+    @if (p.totalPages > 1) {
+      <div class="flex items-center justify-center gap-2 mt-4">
+        <button
+          class="btn btn-sm"
+          [disabled]="p.currentPage === 1"
+          (click)="changePage(p.currentPage - 1)">
+          «
+        </button>
+
+        @for (page of [].constructor(p.totalPages); track $index) {
+          <button
+            class="btn btn-sm"
+            [class.btn-active]="p.currentPage === $index + 1"
+            (click)="changePage($index + 1)">
+            {{ $index + 1 }}
+          </button>
+        }
+
+        <button
+          class="btn btn-sm"
+          [disabled]="p.currentPage === p.totalPages"
+          (click)="changePage(p.currentPage + 1)">
+          »
+        </button>
+      </div>
+      <p class="text-center text-sm opacity-70 mt-2">
+        {{ p.totalItems }} members · page {{ p.currentPage }} of {{ p.totalPages }}
+      </p>
+    }
+  }
 </div>

@@ -1,5 +1,7 @@
 using API.Data;
 using API.DTO;
+using API.Extensions;
+using API.Helpers;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
@@ -15,11 +17,34 @@ namespace API.Controllers
         #region "User"
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<MemberDTO>>> GetMembers()
+        public async Task<ActionResult<IReadOnlyList<MemberDTO>>> GetMembers([FromQuery] UserParams userParams)
         {
-            var members = await context.Users
-                .ProjectTo<MemberDTO>(mapper.ConfigurationProvider)
-                .ToListAsync();
+            var query = context.Users.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(userParams.Search))
+            {
+                var search = userParams.Search.ToLower();
+                query = query.Where(u => u.UserName.ToLower().Contains(search));
+            }
+
+            var descending = userParams.Direction.ToLower() == "desc";
+            query = userParams.OrderBy.ToLower() switch
+            {
+                "username" => descending
+                    ? query.OrderByDescending(u => u.UserName)
+                    : query.OrderBy(u => u.UserName),
+                _ => descending
+                    ? query.OrderByDescending(u => u.UserName)
+                    : query.OrderBy(u => u.UserName),
+            };
+
+            var members = await PagedList<MemberDTO>.CreateAsync(
+                query.ProjectTo<MemberDTO>(mapper.ConfigurationProvider),
+                userParams.PageNumber,
+                userParams.PageSize);
+
+            Response.AddPaginationHeader(members);
+
             return members;
         }
 

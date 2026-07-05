@@ -4,6 +4,7 @@ using API.DTO;
 using API.Entities;
 using API.Helpers;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -26,6 +27,18 @@ public class MembersControllerTests
             cfg => cfg.AddProfile<AutoMapperProfiles>(),
             NullLoggerFactory.Instance);
         return config.CreateMapper();
+    }
+
+    private static MembersController CreateController(AppDbContext context)
+    {
+        return new MembersController(context, CreateMapper())
+        {
+            // GetMembers writes a pagination header, which needs a response.
+            ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext()
+            }
+        };
     }
 
     private AppUser CreateUser(Guid? id = null, AppUser? user = null)
@@ -52,10 +65,10 @@ public class MembersControllerTests
         );
         await context.SaveChangesAsync();
 
-        var controller = new MembersController(context, CreateMapper());
+        var controller = CreateController(context);
 
         // Act
-        ActionResult<IReadOnlyList<MemberDTO>> result = await controller.GetMembers();
+        ActionResult<IReadOnlyList<MemberDTO>> result = await controller.GetMembers(new UserParams());
 
         // Assert
         Assert.NotNull(result.Value);
