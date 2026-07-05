@@ -1,8 +1,13 @@
-﻿using API.Controllers;
+using API.Controllers;
 using API.Data;
+using API.DTO;
 using API.Entities;
+using API.Helpers;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
 public class MembersControllerTests
@@ -14,6 +19,26 @@ public class MembersControllerTests
             .Options;
 
         return new AppDbContext(options);
+    }
+
+    private static IMapper CreateMapper()
+    {
+        var config = new MapperConfiguration(
+            cfg => cfg.AddProfile<AutoMapperProfiles>(),
+            NullLoggerFactory.Instance);
+        return config.CreateMapper();
+    }
+
+    private static MembersController CreateController(AppDbContext context)
+    {
+        return new MembersController(context, CreateMapper())
+        {
+            // GetMembers writes a pagination header, which needs a response.
+            ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext()
+            }
+        };
     }
 
     private AppUser CreateUser(Guid? id = null, AppUser? user = null)
@@ -40,10 +65,10 @@ public class MembersControllerTests
         );
         await context.SaveChangesAsync();
 
-        var controller = new MembersController(context);
+        var controller = CreateController(context);
 
         // Act
-        ActionResult<IReadOnlyList<AppUser>> result = await controller.GetMembers();
+        ActionResult<IReadOnlyList<MemberDTO>> result = await controller.GetMembers(new UserParams());
 
         // Assert
         Assert.NotNull(result.Value);
@@ -61,16 +86,15 @@ public class MembersControllerTests
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        var controller = new MembersController(context);
+        var controller = new MembersController(context, CreateMapper());
 
         // Act
-        ActionResult<AppUser> result = await controller.GetMemberByID(id);
+        ActionResult<MemberDTO> result = await controller.GetMemberByID(id);
 
         // Assert
         Assert.NotNull(result.Value);
         Assert.Equal(id, result.Value!.Id);
         Assert.Equal("jane", result.Value.UserName);
-        Assert.Equal("jane@test.com", result.Value.Email);
     }
 
     [Fact]
@@ -78,10 +102,10 @@ public class MembersControllerTests
     {
         // Arrange
         await using var context = CreateContext(nameof(GetMemberByID_WhenMissing_ReturnsNotFound));
-        var controller = new MembersController(context);
+        var controller = new MembersController(context, CreateMapper());
 
         // Act
-        ActionResult<AppUser> result = await controller.GetMemberByID(Guid.NewGuid());
+        ActionResult<MemberDTO> result = await controller.GetMemberByID(Guid.NewGuid());
 
         // Assert
         Assert.Null(result.Value);

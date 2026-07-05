@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 export class AccountService {
   private http = inject(HttpClient);
 
-  baseUrl= 'https://localhost:5001/api/';
+  baseUrl = environment.apiUrl;
 
   login(creds: any){
     return this.http.post(this.baseUrl + 'account/login', creds);

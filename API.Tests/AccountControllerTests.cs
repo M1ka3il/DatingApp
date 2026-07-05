@@ -29,8 +29,8 @@ namespace API.Tests.Controllers
       var config = new ConfigurationBuilder()
           .AddInMemoryCollection(new Dictionary<string, string?>
           {
-            // Key sollte lang genug sein (typisch >= 32 chars)
-            ["TokenKey"] = "THIS_IS_A_TEST_TOKEN_KEY_1234567890_ABCDEF"
+            // TokenService requires a key of at least 64 characters.
+            ["TokenKey"] = "THIS_IS_A_TEST_TOKEN_KEY_1234567890_ABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"
           })
           .Build();
 
