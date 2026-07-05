@@ -4,14 +4,13 @@ using API.DTO;
 using API.Entities;
 using API.Extensions;
 using API.Interfaces;
-using API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace API.Controllers;
 
-public class AccountController(AppDbContext context, TokenService tokenService) : BaseAPIController
+public class AccountController(AppDbContext context, ITokenService tokenService) : BaseAPIController
 {
   [HttpPost("register")] //api/account/register
   public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)

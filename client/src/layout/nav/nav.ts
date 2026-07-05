@@ -1,12 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { inject, Injectable } from '@angular/core';
 import { AccountService } from '../../core/services/account-service.service';
 
 @Component({
   selector: 'app-nav',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './nav.html',
   styleUrls: ['./nav.css']
 })

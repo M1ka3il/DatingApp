@@ -1,14 +1,3 @@
 <app-nav/>
 
-<div class="card bg-base-100 w-1/2 mx-auto p-10 mt-24 shadow-xl"> 
-  <ul class="list">
-    @for(element of AppUser(); track element.id) {
-      <li class="list-row items-center">
-        <img src="/male_defaultAvatar_vecteezy.jpg" alt="user avatar" class="size-12 rounded-box">
-        <div>
-          {{element.userName}}
-        </div>
-      </li>
-    }
-  </ul>
-</div>
+<router-outlet/>

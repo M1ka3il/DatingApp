@@ -1,32 +1,13 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { lastValueFrom } from 'rxjs';
 import { Nav } from "../layout/nav/nav";
 
 @Component({
   selector: 'app-root',
-  imports: [Nav],
+  imports: [Nav, RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-
-
-export class App implements OnInit{
-  private http = inject(HttpClient);
+export class App {
   protected title = 'Dating App';
-  protected AppUser = signal<any>([]);;
-  
-  async ngOnInit() {
-    this.AppUser.set(await this.getMembers());
-  }
-
-async getMembers(){
-  try{
-    return lastValueFrom(this.http.get('https://localhost:5001/api/members'));
-  } catch (error) {
-    console.error('Error fetching members:', error);
-    throw error;
-  }
-}
 }

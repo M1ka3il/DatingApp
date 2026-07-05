@@ -1,0 +1,7 @@
+@if (member(); as member) {
+  <div class="card bg-base-100 w-1/2 mx-auto p-10 mt-24 shadow-xl items-center text-center">
+    <img [src]="member.imageUrl || '/male_defaultAvatar_vecteezy.jpg'" alt="user avatar" class="size-32 rounded-box">
+    <h2 class="text-2xl font-semibold mt-4">{{member.userName}}</h2>
+    <a routerLink="/members" class="btn mt-6">Back to list</a>
+  </div>
+}
