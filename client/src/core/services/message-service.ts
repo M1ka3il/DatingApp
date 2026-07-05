@@ -1,8 +1,10 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { map } from 'rxjs';
 import { Message } from '../models/message';
 import { PaginatedResult } from '../models/pagination';
+import { User } from '../models/user';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -11,6 +13,42 @@ import { environment } from '../../environments/environment';
 export class MessageService {
   private http = inject(HttpClient);
   baseUrl = environment.apiUrl;
+  hubUrl = environment.hubUrl;
+
+  private hubConnection?: HubConnection;
+  // Live thread populated by the message hub.
+  messageThread = signal<Message[]>([]);
+
+  createHubConnection(user: User, otherUserId: string) {
+    this.hubConnection = new HubConnectionBuilder()
+      .withUrl(`${this.hubUrl}message?user=${otherUserId}`, {
+        accessTokenFactory: () => user.token,
+      })
+      .withAutomaticReconnect()
+      .configureLogging(LogLevel.Error)
+      .build();
+
+    this.hubConnection.start().catch((error) => console.error(error));
+
+    this.hubConnection.on('ReceiveMessageThread', (messages: Message[]) => {
+      this.messageThread.set(messages);
+    });
+
+    this.hubConnection.on('NewMessage', (message: Message) => {
+      this.messageThread.update((thread) => [...thread, message]);
+    });
+  }
+
+  stopHubConnection() {
+    if (this.hubConnection?.state === 'Connected') {
+      this.hubConnection.stop().catch((error) => console.error(error));
+    }
+    this.messageThread.set([]);
+  }
+
+  async sendMessageViaHub(recipientId: string, content: string) {
+    return this.hubConnection?.invoke('SendMessage', { recipientId, content });
+  }
 
   getMessages(container: string, pageNumber: number, pageSize: number) {
     const params = new HttpParams()

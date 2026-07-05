@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MemberService } from '../../core/services/member';
+import { PresenceService } from '../../core/services/presence-service';
 import { Member } from '../../core/models/member';
 import { Pagination } from '../../core/models/pagination';
 import { UserParams } from '../../core/models/user-params';
@@ -14,9 +15,14 @@ import { UserParams } from '../../core/models/user-params';
 })
 export class MemberList implements OnInit {
   private memberService = inject(MemberService);
+  private presenceService = inject(PresenceService);
   protected members = signal<Member[]>([]);
   protected pagination = signal<Pagination | undefined>(undefined);
   protected userParams = new UserParams();
+
+  isOnline(member: Member) {
+    return this.presenceService.onlineUsers().includes(member.userName);
+  }
 
   ngOnInit() {
     this.loadMembers();

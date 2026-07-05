@@ -2,6 +2,7 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using API.Interfaces;
 using API.Services;
+using API.SignalR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -16,13 +17,15 @@ builder.Services.AddDbContext<AppDbContext>( opt =>
 });
 
 builder.Services.AddCors();
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<PresenceTracker>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 builder.Services.AddAutoMapper(cfg => { }, typeof(Program).Assembly);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        var tokenKey = builder.Configuration["TokenKey"] 
+        var tokenKey = builder.Configuration["TokenKey"]
         ?? throw new Exception("TokenKey is missing");
 
         options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
@@ -31,6 +34,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
             ValidateIssuer = false,
             ValidateAudience = false
+        };
+
+        // SignalR sends the JWT via the query string (browsers can't set headers on WS).
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                {
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
         };
     });
 
@@ -44,11 +62,14 @@ app.UseStaticFiles();
 
 app.UseCors( opt => opt.AllowAnyHeader()
     .AllowAnyMethod()
+    .AllowCredentials()
     .WithOrigins("http://localhost:4200","https://localhost:4200"))
     .UseAuthentication()
-    .UseAuthorization(); 
+    .UseAuthorization();
 
 app.MapControllers();
+app.MapHub<PresenceHub>("hubs/presence");
+app.MapHub<MessageHub>("hubs/message");
 
 app.Run();
 

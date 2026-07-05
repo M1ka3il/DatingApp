@@ -1,13 +1,13 @@
-import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, computed, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { MemberService } from '../../core/services/member';
 import { MessageService } from '../../core/services/message-service';
+import { PresenceService } from '../../core/services/presence-service';
 import { AccountService } from '../../core/services/account-service.service';
 import { ToastService } from '../../core/services/toast-service';
 import { Member } from '../../core/models/member';
-import { Message } from '../../core/models/message';
 import { DragDrop } from '../../core/directives/drag-drop';
 
 @Component({
@@ -16,9 +16,10 @@ import { DragDrop } from '../../core/directives/drag-drop';
   templateUrl: './member-detail.html',
   styleUrl: './member-detail.css',
 })
-export class MemberDetail implements OnInit {
+export class MemberDetail implements OnInit, OnDestroy {
   private memberService = inject(MemberService);
-  private messageService = inject(MessageService);
+  protected messageService = inject(MessageService);
+  private presenceService = inject(PresenceService);
   private accountService = inject(AccountService);
   private toast = inject(ToastService);
 
@@ -26,8 +27,9 @@ export class MemberDetail implements OnInit {
   protected member = signal<Member | undefined>(undefined);
   protected uploading = signal(false);
 
-  protected messages = signal<Message[]>([]);
   protected newMessage = '';
+  // Live thread comes from the message hub.
+  protected messages = this.messageService.messageThread;
   protected currentUserId = computed(() => this.accountService.currentUser()?.id);
 
   protected isCurrentUser = computed(
@@ -39,11 +41,20 @@ export class MemberDetail implements OnInit {
     () => !!this.accountService.currentUser() && !this.isCurrentUser()
   );
 
+  protected isOnline = computed(() =>
+    this.presenceService.onlineUsers().includes(this.member()?.userName ?? '')
+  );
+
   ngOnInit() {
     this.loadMember();
-    if (this.accountService.currentUser()) {
-      this.loadThread();
+    const user = this.accountService.currentUser();
+    if (user && user.id !== this.id()) {
+      this.messageService.createHubConnection(user, this.id());
     }
+  }
+
+  ngOnDestroy() {
+    this.messageService.stopHubConnection();
   }
 
   loadMember() {
@@ -52,21 +63,11 @@ export class MemberDetail implements OnInit {
     });
   }
 
-  loadThread() {
-    this.messageService.getMessageThread(this.id()).subscribe({
-      next: (messages) => this.messages.set(messages),
-    });
-  }
-
-  sendMessage() {
+  async sendMessage() {
     const content = this.newMessage.trim();
     if (!content) return;
-    this.messageService.sendMessage(this.id(), content).subscribe({
-      next: (message) => {
-        this.messages.update((m) => [...m, message]);
-        this.newMessage = '';
-      },
-    });
+    await this.messageService.sendMessageViaHub(this.id(), content);
+    this.newMessage = '';
   }
 
   onFilesDropped(files: FileList) {
