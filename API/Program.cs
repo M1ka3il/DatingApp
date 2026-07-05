@@ -17,6 +17,7 @@ builder.Services.AddDbContext<AppDbContext>( opt =>
 
 builder.Services.AddCors();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 builder.Services.AddAutoMapper(cfg => { }, typeof(Program).Assembly);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -37,6 +38,9 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseMiddleware<API.Middleware.ExceptionMiddleware>();
+
+// Serve uploaded photos from wwwroot (e.g. /uploads/<file>).
+app.UseStaticFiles();
 
 app.UseCors( opt => opt.AllowAnyHeader()
     .AllowAnyMethod()
