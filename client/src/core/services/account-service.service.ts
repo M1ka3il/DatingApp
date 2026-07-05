@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
 import { User } from '../models/user';
+import { PresenceService } from './presence-service';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -9,6 +10,7 @@ import { environment } from '../../environments/environment';
 })
 export class AccountService {
   private http = inject(HttpClient);
+  private presenceService = inject(PresenceService);
   private static readonly StorageKey = 'user';
 
   baseUrl = environment.apiUrl;
@@ -29,18 +31,22 @@ export class AccountService {
   setCurrentUser(user: User) {
     localStorage.setItem(AccountService.StorageKey, JSON.stringify(user));
     this.currentUser.set(user);
+    this.presenceService.createHubConnection(user);
   }
 
   // Restore the persisted session on app start.
   loadCurrentUser() {
     const stored = localStorage.getItem(AccountService.StorageKey);
     if (stored) {
-      this.currentUser.set(JSON.parse(stored) as User);
+      const user = JSON.parse(stored) as User;
+      this.currentUser.set(user);
+      this.presenceService.createHubConnection(user);
     }
   }
 
   logout() {
     localStorage.removeItem(AccountService.StorageKey);
+    this.presenceService.stopHubConnection();
     this.currentUser.set(null);
   }
 }

@@ -11,7 +11,9 @@
   <nav class="flex gap-3 my-2 uppercase text-lg text-white">
     <a routerLink="/members">Matches</a>
     <a>Lists</a>
-    <a>Messages</a>
+    @if (loggedIn()) {
+      <a routerLink="/messages">Messages</a>
+    }
   </nav>
   <div class="flex align-middle ml-auto gap-3">
     @if(loggedIn()){

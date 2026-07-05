@@ -1,0 +1,58 @@
+<div class="w-2/3 mx-auto mt-24">
+  <!-- Container tabs -->
+  <div class="tabs tabs-boxed mb-4 justify-center">
+    @for (c of containers; track c) {
+      <a
+        class="tab"
+        [class.tab-active]="container() === c"
+        (click)="setContainer(c)">
+        {{ c }}
+      </a>
+    }
+  </div>
+
+  <div class="card bg-base-100 p-6 shadow-xl">
+    @if (loading()) {
+      <p class="text-center"><span class="loading loading-spinner"></span></p>
+    } @else if (messages().length === 0) {
+      <p class="text-center opacity-70">No messages.</p>
+    } @else {
+      <ul class="list">
+        @for (message of messages(); track message.id) {
+          <li class="list-row items-center gap-4">
+            <img [src]="partnerPhoto(message)" alt="avatar" class="size-12 rounded-box object-cover">
+            <a [routerLink]="['/members', partnerId(message)]" class="font-semibold w-28 truncate">
+              {{ partnerName(message) }}
+            </a>
+            <div class="flex-1 truncate opacity-90">{{ message.content }}</div>
+            <div class="text-xs opacity-60 w-40 text-right">
+              {{ message.messageSent | date: 'short' }}
+              @if (!isOutbox() && !message.dateRead) {
+                <span class="badge badge-primary badge-xs ml-1">new</span>
+              }
+            </div>
+            <button class="btn btn-xs btn-error" (click)="deleteMessage(message.id)">✕</button>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  <!-- Pagination -->
+  @if (pagination(); as p) {
+    @if (p.totalPages > 1) {
+      <div class="flex items-center justify-center gap-2 mt-4">
+        <button class="btn btn-sm" [disabled]="p.currentPage === 1" (click)="changePage(p.currentPage - 1)">«</button>
+        @for (page of [].constructor(p.totalPages); track $index) {
+          <button
+            class="btn btn-sm"
+            [class.btn-active]="p.currentPage === $index + 1"
+            (click)="changePage($index + 1)">
+            {{ $index + 1 }}
+          </button>
+        }
+        <button class="btn btn-sm" [disabled]="p.currentPage === p.totalPages" (click)="changePage(p.currentPage + 1)">»</button>
+      </div>
+    }
+  }
+</div>

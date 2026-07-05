@@ -36,7 +36,12 @@
         @for (member of members(); track member.id) {
           <li class="list-row items-center">
             <a [routerLink]="['/members', member.id]" class="flex items-center gap-4 w-full">
-              <img [src]="member.imageUrl || '/male_defaultAvatar_vecteezy.jpg'" alt="user avatar" class="size-12 rounded-box">
+              <div class="relative">
+                <img [src]="member.imageUrl || '/male_defaultAvatar_vecteezy.jpg'" alt="user avatar" class="size-12 rounded-box object-cover">
+                @if (isOnline(member)) {
+                  <span class="absolute -top-1 -right-1 size-3 rounded-full bg-success ring-2 ring-base-100" title="Online"></span>
+                }
+              </div>
               <div>{{ member.userName }}</div>
             </a>
           </li>
