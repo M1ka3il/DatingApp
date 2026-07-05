@@ -1,19 +1,24 @@
 import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
 import { MemberService } from '../../core/services/member';
+import { MessageService } from '../../core/services/message-service';
 import { AccountService } from '../../core/services/account-service.service';
 import { ToastService } from '../../core/services/toast-service';
 import { Member } from '../../core/models/member';
+import { Message } from '../../core/models/message';
 import { DragDrop } from '../../core/directives/drag-drop';
 
 @Component({
   selector: 'app-member-detail',
-  imports: [RouterLink, DragDrop],
+  imports: [RouterLink, DragDrop, FormsModule, DatePipe],
   templateUrl: './member-detail.html',
   styleUrl: './member-detail.css',
 })
 export class MemberDetail implements OnInit {
   private memberService = inject(MemberService);
+  private messageService = inject(MessageService);
   private accountService = inject(AccountService);
   private toast = inject(ToastService);
 
@@ -21,17 +26,46 @@ export class MemberDetail implements OnInit {
   protected member = signal<Member | undefined>(undefined);
   protected uploading = signal(false);
 
+  protected messages = signal<Message[]>([]);
+  protected newMessage = '';
+  protected currentUserId = computed(() => this.accountService.currentUser()?.id);
+
   protected isCurrentUser = computed(
     () => this.accountService.currentUser()?.id === this.member()?.id
   );
 
+  // Show the chat thread when viewing another member while logged in.
+  protected canMessage = computed(
+    () => !!this.accountService.currentUser() && !this.isCurrentUser()
+  );
+
   ngOnInit() {
     this.loadMember();
+    if (this.accountService.currentUser()) {
+      this.loadThread();
+    }
   }
 
   loadMember() {
     this.memberService.getMember(this.id()).subscribe({
       next: (member) => this.member.set(member),
+    });
+  }
+
+  loadThread() {
+    this.messageService.getMessageThread(this.id()).subscribe({
+      next: (messages) => this.messages.set(messages),
+    });
+  }
+
+  sendMessage() {
+    const content = this.newMessage.trim();
+    if (!content) return;
+    this.messageService.sendMessage(this.id(), content).subscribe({
+      next: (message) => {
+        this.messages.update((m) => [...m, message]);
+        this.newMessage = '';
+      },
     });
   }
 
