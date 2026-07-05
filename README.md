@@ -15,13 +15,13 @@
 
 - [x] Project setup (.NET & Angular CLI)
 - [X] User registration and JWT authentication
-- [ ] Basic user profile UI
-- [ ] API integration between Angular and .NET Core
-- [ ] AutoMapper configuration
-- [ ] Entity Framework Core setup with code-first migrations
-- [ ] Photo upload with drag & drop (Cloud integration)
-- [ ] Private messaging system
-- [ ] Real-time presence and messaging with SignalR
+- [X] Basic user profile UI
+- [X] API integration between Angular and .NET Core
+- [X] AutoMapper configuration
+- [X] Entity Framework Core setup with code-first migrations
+- [X] Photo upload with drag & drop (Cloud integration)
+- [X] Private messaging system
+- [X] Real-time presence and messaging with SignalR
 - [ ] Filtering, sorting, and pagination
 - [ ] Notifications in Angular
 - [ ] Error handling for API and SPA
