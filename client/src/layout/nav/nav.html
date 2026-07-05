@@ -16,10 +16,10 @@
   <div class="flex align-middle ml-auto gap-3">
     @if(loggedIn()){
       <div class="dropdown-end">
-        <div tabindex="0" role="button" 
+        <div tabindex="0" role="button"
         class="flex items-center text-white text-xl gap-3 cursor-pointer">
-          <img src="assets/user.png" alt="User Avatar" class="w-8 h-8 rounded-full">
-          <span>User</span>
+          <img [src]="accountService.currentUser()?.imageUrl || '/male_defaultAvatar_vecteezy.jpg'" alt="User Avatar" class="w-8 h-8 rounded-full object-cover">
+          <span>{{ accountService.currentUser()?.userName }}</span>
         </div>
         <ul tabindex="-1" class="dropdown-content  menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
           <li><a>Edit Profile</a></li>

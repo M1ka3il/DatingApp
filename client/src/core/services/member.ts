@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs';
-import { Member } from '../models/member';
+import { Member, Photo } from '../models/member';
 import { PaginatedResult } from '../models/pagination';
 import { UserParams } from '../models/user-params';
 import { environment } from '../../environments/environment';
@@ -42,5 +42,19 @@ export class MemberService {
 
   getMember(id: string) {
     return this.http.get<Member>(this.baseUrl + 'members/' + id);
+  }
+
+  uploadPhoto(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<Photo>(this.baseUrl + 'members/add-photo', formData);
+  }
+
+  setMainPhoto(photoId: number) {
+    return this.http.put(this.baseUrl + 'members/set-main-photo/' + photoId, {});
+  }
+
+  deletePhoto(photoId: number) {
+    return this.http.delete(this.baseUrl + 'members/delete-photo/' + photoId);
   }
 }
