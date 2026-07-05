@@ -20,7 +20,7 @@ namespace API.Controllers
             var members = await context.Users
                 .ProjectTo<MemberDTO>(mapper.ConfigurationProvider)
                 .ToListAsync();
-            return Ok(members);
+            return members;
         }
 
         [AllowAnonymous]

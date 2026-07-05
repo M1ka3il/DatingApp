@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Member } from '../models/member';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,7 @@ import { Member } from '../models/member';
 export class MemberService {
   private http = inject(HttpClient);
 
-  baseUrl = 'https://localhost:5001/api/';
+  baseUrl = environment.apiUrl;
 
   getMembers() {
     return this.http.get<Member[]>(this.baseUrl + 'members');
