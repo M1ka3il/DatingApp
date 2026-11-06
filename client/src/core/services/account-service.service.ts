@@ -1,8 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { tap } from 'rxjs';
 import { User } from '../models/user';
 import { PresenceService } from './presence-service';
+import { SKIP_ERROR_TOAST } from '../interceptors/error-interceptor';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -17,13 +18,17 @@ export class AccountService {
   currentUser = signal<User | null>(null);
 
   login(creds: { email: string; password: string }) {
-    return this.http.post<User>(this.baseUrl + 'account/login', creds).pipe(
+    // The navbar shows its own "Failed to log in" toast.
+    const context = new HttpContext().set(SKIP_ERROR_TOAST, true);
+    return this.http.post<User>(this.baseUrl + 'account/login', creds, { context }).pipe(
       tap((user) => this.setCurrentUser(user))
     );
   }
 
   register(creds: { userName: string; email: string; password: string }) {
-    return this.http.post<User>(this.baseUrl + 'account/register', creds).pipe(
+    // The register form displays server errors inline – no extra toast.
+    const context = new HttpContext().set(SKIP_ERROR_TOAST, true);
+    return this.http.post<User>(this.baseUrl + 'account/register', creds, { context }).pipe(
       tap((user) => this.setCurrentUser(user))
     );
   }

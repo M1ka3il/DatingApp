@@ -1,6 +1,6 @@
-<div class="w-2/3 mx-auto mt-24">
+<div class="w-full max-w-5xl mx-auto px-4 pt-28 pb-10">
   <!-- Filter / sort controls -->
-  <div class="card bg-base-100 p-4 shadow-xl mb-4 flex flex-row flex-wrap items-center gap-3">
+  <div class="card bg-base-100/80 backdrop-blur p-4 shadow-xl mb-6 flex flex-row flex-wrap items-center gap-3">
     <input
       [(ngModel)]="userParams.search"
       (keyup.enter)="search()"
@@ -27,33 +27,38 @@
     <button (click)="resetFilters()" class="btn btn-ghost ml-auto">Reset</button>
   </div>
 
-  <!-- Member list -->
-  <div class="card bg-base-100 p-8 shadow-xl">
-    @if (members().length === 0) {
+  <!-- Member grid -->
+  @if (members().length === 0) {
+    <div class="card bg-base-100/80 backdrop-blur p-8 shadow-xl">
       <p class="text-center opacity-70">No members found.</p>
-    } @else {
-      <ul class="list">
-        @for (member of members(); track member.id) {
-          <li class="list-row items-center">
-            <a [routerLink]="['/members', member.id]" class="flex items-center gap-4 w-full">
-              <div class="relative">
-                <img [src]="member.imageUrl || '/male_defaultAvatar_vecteezy.jpg'" alt="user avatar" class="size-12 rounded-box object-cover">
-                @if (isOnline(member)) {
-                  <span class="absolute -top-1 -right-1 size-3 rounded-full bg-success ring-2 ring-base-100" title="Online"></span>
-                }
-              </div>
-              <div>{{ member.userName }}</div>
-            </a>
-          </li>
-        }
-      </ul>
-    }
-  </div>
+    </div>
+  } @else {
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+      @for (member of members(); track member.id) {
+        <a
+          [routerLink]="['/members', member.id]"
+          class="group relative block overflow-hidden rounded-box bg-base-100 shadow-lg ring-1 ring-base-300 transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
+          <img
+            [src]="member.imageUrl || '/male_defaultAvatar_vecteezy.jpg'"
+            alt="Photo of {{ member.userName }}"
+            class="aspect-[4/5] w-full object-cover transition duration-300 group-hover:scale-105">
+          <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4 pt-12">
+            <div class="flex items-center gap-2 text-lg font-semibold text-white capitalize">
+              {{ member.userName }}
+              @if (isOnline(member)) {
+                <span class="size-3 rounded-full bg-emerald-400 ring-2 ring-white" title="Online"></span>
+              }
+            </div>
+          </div>
+        </a>
+      }
+    </div>
+  }
 
   <!-- Pagination -->
   @if (pagination(); as p) {
     @if (p.totalPages > 1) {
-      <div class="flex items-center justify-center gap-2 mt-4">
+      <div class="flex items-center justify-center gap-2 mt-8">
         <button
           class="btn btn-sm"
           [disabled]="p.currentPage === 1"
