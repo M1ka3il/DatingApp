@@ -44,6 +44,14 @@ export class Register {
   protected submitting = signal(false);
   protected serverErrors = signal<string[]>([]);
 
+  constructor() {
+    // Already logged in (e.g. /register opened via URL): registering again would
+    // replace the session and leave the old presence connection open.
+    if (this.accountService.currentUser()) {
+      this.router.navigateByUrl('/members');
+    }
+  }
+
   protected showError(name: 'userName' | 'email' | 'password' | 'confirmPassword'): boolean {
     const control = this.form.controls[name];
     return control.invalid && (control.touched || control.dirty);
