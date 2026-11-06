@@ -8,32 +8,24 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4%20%2B%20DaisyUI%205-38B2AC?logo=tailwindcss&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/license-MIT-yellow)
 
----
+> 🚧 **Work in progress** – built step by step as part of my self-taught WebDev journey.
 
-> 🚧 **This project is a work in progress. Features are being implemented step by step as part of my self taught WebDev Journey**
+## 📝 Summary
 
-## ✅ Project Checklist
+A small dating app with an **ASP.NET Core Web API** backend and an **Angular** single-page frontend.
+Users can register and log in (JWT), browse other members with search, sorting and pagination,
+upload profile photos via drag & drop, and chat with each other in real time via **SignalR** –
+including a live online indicator.
 
-- [x] Project setup (.NET & Angular CLI)
-- [x] User registration and JWT authentication (API)
-- [x] Basic user profile UI (member list & member detail)
-- [x] API integration between Angular and .NET Core
-- [x] AutoMapper configuration
-- [x] Entity Framework Core setup with code-first migrations (SQLite)
-- [x] Filtering, sorting, and pagination
-- [x] Notifications in Angular (ngx-toastr)
-- [x] Error handling for API and SPA
-- [x] Environment switching (Angular `environment.ts` / `environment.development.ts`)
-- [x] Integration of third-party UI components (Tailwind CSS, DaisyUI, ngx-toastr)
-- [x] Unit tests for `AccountController` and `MembersController` (xUnit, EF Core InMemory)
-- [x] Persist JWT in the client & send it with requests (localStorage + JWT interceptor)
-- [x] Photo upload with drag & drop (local storage in `wwwroot/uploads`, set main photo, delete)
-- [x] Private messaging system
-- [x] Real-time presence and messaging with SignalR
-- [x] Registration form in the Angular client (`/register`, reactive form with validation)
-- [ ] Route guards for authenticated pages
-- [ ] Cloud storage for photos (e.g. Cloudinary – swap `LocalFileStorageService` via `IFileStorageService`)
-- [ ] Deployment-ready configuration (production settings, CORS, serving the SPA)
+![Member list](docs/screenshots/members.png)
+
+| Register | Profile & photo upload |
+|---|---|
+| ![Register](docs/screenshots/register.png) | ![Own profile](docs/screenshots/own-profile.png) |
+| **Live chat with online status** | **Messages (Inbox / Outbox / Unread)** |
+| ![Member detail with chat](docs/screenshots/member-detail.png) | ![Messages](docs/screenshots/messages.png) |
+
+<sub>Screenshots use generated placeholder avatars and sample data.</sub>
 
 ---
 
@@ -59,47 +51,27 @@ Open http://localhost:4200, click **Register** in the top bar and create your fi
 
 ---
 
+## ✨ Features
+
+- **Accounts** – registration & login, JWT auth (HMACSHA512 password hashing), session kept in localStorage
+- **Members** – list with username search, A–Z / Z–A sorting and server-side pagination; member detail page
+- **Photos** – drag & drop upload (jpg/png/gif/webp, max 10 MB), set main photo, delete
+- **Messaging** – private messages with Inbox / Outbox / Unread views
+- **Real-time** – SignalR hubs for online presence and live chat threads
+- **Error handling** – global API exception middleware, Angular error interceptor with toasts and error pages
+- **Tests** – xUnit tests for the Account and Members controllers
+
 ## 🔧 Tech Stack
 
-- **Frontend**: Angular 20 (standalone components, signals, zoneless change detection)
-- **Styling**: Tailwind CSS 4 + DaisyUI 5
-- **Backend**: ASP.NET Core (.NET 9) Web API
-- **Database**: Entity Framework Core 9 (Code First) with SQLite
-- **Real-time**: SignalR (presence & message hubs)
-- **Auth**: JWT Bearer tokens, HMACSHA512 password hashing
-- **Mapping**: AutoMapper
-- **Testing**: xUnit + EF Core InMemory
-- **IDE**: Visual Studio
+| Area | Technology |
+|---|---|
+| Frontend | Angular 20 (standalone components, signals, zoneless), Tailwind CSS 4, DaisyUI 5, ngx-toastr |
+| Backend | ASP.NET Core Web API (.NET 9), SignalR, AutoMapper |
+| Data | Entity Framework Core 9 (code first), SQLite |
+| Testing | xUnit, EF Core InMemory |
 
----
+## 🚀 Next steps
 
-## 📦 What's implemented
-
-**API**
-- `POST api/account/register` / `POST api/account/login` – returns user + JWT
-- `GET api/members` – search by username, sort asc/desc, pagination (`Pagination` response header, max page size 50)
-- `GET api/members/{id}` – single member
-- `POST api/members/add-photo`, `PUT api/members/set-main-photo/{id}`, `DELETE api/members/delete-photo/{id}` – photo management (jpg/png/gif/webp, max 10 MB)
-- `POST api/messages`, `GET api/messages` (Inbox / Outbox / Unread, paginated), `GET api/messages/thread/{userId}`, `DELETE api/messages/{id}`
-- SignalR hubs: `hubs/presence` (online users) and `hubs/message` (live chat threads), JWT via `access_token` query string
-- Global `ExceptionMiddleware` (stack trace only in Development)
-- `api/buggy/*` endpoints to test the error-handling pipeline
-
-**Client**
-- Registration page (`/register`) with client-side validation and server error display
-- Login / logout in the navbar, session persisted in localStorage, JWT attached by interceptor
-- Member list with search, A–Z / Z–A sorting and pagination
-- Member detail page with drag & drop photo upload, main-photo selection and deletion
-- Messages page (inbox/outbox) and live chat thread
-- Online presence indicator
-- HTTP error interceptor: toasts for 400/401, redirect to `/not-found` (404) and `/server-error` (500)
-
----
-
-## 🚀 Features (planned)
-
-- 🔜 Route guards
-- 🔜 Cloud storage for photos
-- 🔜 Deployment-ready configuration
-
----
+- Route guards for authenticated pages
+- Cloud storage for photos (e.g. Cloudinary – swap `LocalFileStorageService` via `IFileStorageService`)
+- Deployment-ready configuration (production settings, CORS, serving the SPA)
