@@ -1,7 +1,8 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { inject } from '@angular/core';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { filter } from 'rxjs';
 import { AccountService } from '../../core/services/account-service.service';
 import { ToastService } from '../../core/services/toast-service';
 
@@ -17,12 +18,26 @@ export class Nav {
   private toast = inject(ToastService);
   protected creds: any = {}
   protected loggedIn = computed(() => !!this.accountService.currentUser());
+  // Mobile menu (below the lg breakpoint).
+  protected menuOpen = signal(false);
+
+  constructor() {
+    // Close the mobile menu whenever the user navigates.
+    inject(Router).events
+      .pipe(filter((e) => e instanceof NavigationEnd), takeUntilDestroyed())
+      .subscribe(() => this.menuOpen.set(false));
+  }
+
+  toggleMenu() {
+    this.menuOpen.update((open) => !open);
+  }
 
   login()
   {
     this.accountService.login(this.creds).subscribe({
       next: () => {
         this.creds = {};
+        this.menuOpen.set(false);
         this.toast.success('Logged in successfully');
       },
       error: () => this.toast.error('Failed to log in')
@@ -32,6 +47,7 @@ export class Nav {
   logout()
   {
     this.accountService.logout();
+    this.menuOpen.set(false);
     this.toast.info('Logged out');
   }
 }

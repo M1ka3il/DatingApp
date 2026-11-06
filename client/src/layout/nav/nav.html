@@ -1,50 +1,103 @@
-<header class ="p-3 w-full fixed top-0 z-50 bg-gradient-to-r from-neutral to-[#4a1d4f] shadow-lg">
-<div class="flex align-middle items-center px-10 mx-auto gap-6">
-  <a routerLink="/" class="flex items-center max-h-16 gap-3 text-white border-r-white/30 border-r-2 pr-6">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="size-7 text-primary">
-    <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
-  </svg>
+<header class="w-full fixed top-0 z-50 bg-gradient-to-r from-neutral to-[#4a1d4f] shadow-lg">
+  <div class="flex items-center gap-4 lg:gap-6 px-4 lg:px-10 py-3">
+    <!-- Logo -->
+    <a routerLink="/" class="flex items-center gap-3 text-white lg:border-r-2 lg:border-r-white/30 lg:pr-6">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="size-7 text-primary shrink-0">
+        <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+      </svg>
+      <span class="text-xl lg:text-2xl font-semibold uppercase tracking-wide whitespace-nowrap">Dating App</span>
+    </a>
 
-    <h3 class="text-2xl font-semibold text-white uppercase tracking-wide">Dating App</h3>
-  </a>
-  <nav class="flex gap-5 my-2 uppercase text-lg text-white/80">
-    <a routerLink="/members" routerLinkActive="!text-white border-b-2 border-primary" class="hover:text-white transition-colors">Matches</a>
-    <a class="hover:text-white transition-colors">Lists</a>
-    @if (loggedIn()) {
-      <a routerLink="/messages" routerLinkActive="!text-white border-b-2 border-primary" class="hover:text-white transition-colors">Messages</a>
-    }
-  </nav>
-  <div class="flex align-middle ml-auto gap-3">
-    @if(loggedIn()){
-      <div class="dropdown dropdown-end">
-        <div tabindex="0" role="button"
-        class="flex items-center text-white text-xl gap-3 cursor-pointer">
-          <img [src]="accountService.currentUser()?.imageUrl || '/male_defaultAvatar_vecteezy.jpg'" alt="User Avatar" class="w-8 h-8 rounded-full object-cover">
-          <span>{{ accountService.currentUser()?.userName }}</span>
+    <!-- Desktop links -->
+    <nav class="hidden lg:flex gap-5 uppercase text-lg text-white/80">
+      <a routerLink="/members" routerLinkActive="!text-white border-b-2 border-primary" class="hover:text-white transition-colors">Matches</a>
+      <a class="hover:text-white transition-colors">Lists</a>
+      @if (loggedIn()) {
+        <a routerLink="/messages" routerLinkActive="!text-white border-b-2 border-primary" class="hover:text-white transition-colors">Messages</a>
+      }
+    </nav>
+
+    <!-- Desktop account area -->
+    <div class="hidden lg:flex items-center ml-auto gap-3">
+      @if (loggedIn()) {
+        <div class="dropdown dropdown-end">
+          <div tabindex="0" role="button" class="flex items-center text-white text-xl gap-3 cursor-pointer">
+            <img [src]="accountService.currentUser()?.imageUrl || '/male_defaultAvatar_vecteezy.jpg'" alt="User avatar" class="size-8 rounded-full object-cover">
+            <span>{{ accountService.currentUser()?.userName }}</span>
+          </div>
+          <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+            <li><a>Edit Profile</a></li>
+            <li><a (click)="logout()">Logout</a></li>
+          </ul>
         </div>
-        <ul tabindex="-1" class="dropdown-content  menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-          <li><a>Edit Profile</a></li>
-          <li><a (click)="logout()">Logout</a></li>
-        </ul>
-      </div>
-    } @else {
-  <form #loginForm="ngForm" (ngSubmit)="login()" class="flex items-center gap-3">
-      <input
-        [(ngModel)]="creds.email"
-        name="email"
-        type="text"
-        class ="input"
-        placeholder="Email">
-      <input 
-        [(ngModel)]="creds.password" 
-        type="password" 
-        name="password"
-        class ="input" 
-        placeholder="Password">
-      <button type="submit" class="btn">Login</button>
-      <a routerLink="/register" class="btn btn-primary">Register</a>
-    </form>   
-    }
+      } @else {
+        <form (ngSubmit)="login()" class="flex items-center gap-3">
+          <label for="nav-email" class="sr-only">Email</label>
+          <input id="nav-email" [(ngModel)]="creds.email" name="email" type="email" autocomplete="email" class="input w-44 xl:w-56" placeholder="Email">
+          <label for="nav-password" class="sr-only">Password</label>
+          <input id="nav-password" [(ngModel)]="creds.password" name="password" type="password" autocomplete="current-password" class="input w-44 xl:w-56" placeholder="Password">
+          <button type="submit" class="btn">Login</button>
+          <a routerLink="/register" class="btn btn-primary">Register</a>
+        </form>
+      }
     </div>
-</div>
+
+    <!-- Mobile: avatar + menu toggle -->
+    <div class="flex lg:hidden items-center gap-3 ml-auto">
+      @if (loggedIn()) {
+        <img [src]="accountService.currentUser()?.imageUrl || '/male_defaultAvatar_vecteezy.jpg'" alt="User avatar" class="size-8 rounded-full object-cover">
+      }
+      <button
+        type="button"
+        class="btn btn-ghost btn-square text-white hover:bg-white/10"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="menuOpen()"
+        aria-controls="mobile-menu"
+        [attr.aria-label]="menuOpen() ? 'Close menu' : 'Open menu'">
+        @if (menuOpen()) {
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+        } @else {
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        }
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu panel -->
+  @if (menuOpen()) {
+    <div id="mobile-menu" class="lg:hidden border-t border-white/10 px-4 pb-5 pt-2">
+      <nav class="flex flex-col uppercase text-lg text-white/80">
+        <a routerLink="/members" routerLinkActive="!text-white" class="py-3 border-b border-white/10 hover:text-white">Matches</a>
+        <a class="py-3 border-b border-white/10 hover:text-white">Lists</a>
+        @if (loggedIn()) {
+          <a routerLink="/messages" routerLinkActive="!text-white" class="py-3 border-b border-white/10 hover:text-white">Messages</a>
+        }
+      </nav>
+
+      @if (loggedIn()) {
+        <div class="flex items-center gap-3 pt-4 text-white">
+          <span class="text-lg">{{ accountService.currentUser()?.userName }}</span>
+          <div class="ml-auto flex gap-2">
+            <button type="button" class="btn btn-sm">Edit Profile</button>
+            <button type="button" class="btn btn-sm btn-primary" (click)="logout()">Logout</button>
+          </div>
+        </div>
+      } @else {
+        <form (ngSubmit)="login()" class="flex flex-col gap-3 pt-4">
+          <label for="m-email" class="sr-only">Email</label>
+          <input id="m-email" [(ngModel)]="creds.email" name="email" type="email" autocomplete="email" class="input w-full" placeholder="Email">
+          <label for="m-password" class="sr-only">Password</label>
+          <input id="m-password" [(ngModel)]="creds.password" name="password" type="password" autocomplete="current-password" class="input w-full" placeholder="Password">
+          <div class="flex gap-3">
+            <button type="submit" class="btn flex-1">Login</button>
+            <a routerLink="/register" class="btn btn-primary flex-1">Register</a>
+          </div>
+        </form>
+      }
+    </div>
+  }
 </header>

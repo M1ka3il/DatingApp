@@ -11,7 +11,7 @@
     }
   </div>
 
-  <div class="card bg-base-100 p-6 shadow-xl">
+  <div class="card bg-base-100 p-2 sm:p-6 shadow-xl">
     @if (loading()) {
       <p class="text-center"><span class="loading loading-spinner"></span></p>
     } @else if (messages().length === 0) {
@@ -19,19 +19,21 @@
     } @else {
       <ul class="list">
         @for (message of messages(); track message.id) {
-          <li class="list-row items-center gap-4">
-            <img [src]="partnerPhoto(message)" alt="avatar" class="size-12 rounded-box object-cover">
-            <a [routerLink]="['/members', partnerId(message)]" class="font-semibold w-28 truncate">
-              {{ partnerName(message) }}
-            </a>
-            <div class="flex-1 truncate opacity-90">{{ message.content }}</div>
-            <div class="text-xs opacity-60 w-40 text-right">
-              {{ message.messageSent | date: 'short' }}
-              @if (!isOutbox() && !message.dateRead) {
-                <span class="badge badge-primary badge-xs ml-1">new</span>
-              }
+          <li class="list-row items-center">
+            <img [src]="partnerPhoto(message)" alt="" class="size-12 rounded-box object-cover">
+            <div class="min-w-0">
+              <div class="flex items-baseline gap-2">
+                <a [routerLink]="['/members', partnerId(message)]" class="font-semibold truncate hover:text-primary">
+                  {{ partnerName(message) }}
+                </a>
+                @if (!isOutbox() && !message.dateRead) {
+                  <span class="badge badge-primary badge-xs">new</span>
+                }
+                <span class="ml-auto text-xs opacity-60 whitespace-nowrap">{{ message.messageSent | date: 'short' }}</span>
+              </div>
+              <div class="truncate text-sm opacity-90">{{ message.content }}</div>
             </div>
-            <button class="btn btn-xs btn-error" (click)="deleteMessage(message.id)">✕</button>
+            <button class="btn btn-xs btn-error btn-circle" (click)="deleteMessage(message.id)" aria-label="Delete message">✕</button>
           </li>
         }
       </ul>
