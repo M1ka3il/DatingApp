@@ -44,6 +44,15 @@ export class AccountService {
     }
   }
 
+  // Keep the navbar avatar in sync after the main photo changed.
+  updateImageUrl(imageUrl: string | null) {
+    const user = this.currentUser();
+    if (!user) return;
+    const updated = { ...user, imageUrl };
+    localStorage.setItem(AccountService.StorageKey, JSON.stringify(updated));
+    this.currentUser.set(updated);
+  }
+
   logout() {
     localStorage.removeItem(AccountService.StorageKey);
     this.presenceService.stopHubConnection();

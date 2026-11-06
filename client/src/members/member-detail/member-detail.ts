@@ -89,7 +89,10 @@ export class MemberDetail implements OnInit, OnDestroy {
         const member = this.member();
         if (member) {
           member.photos.push(photo);
-          if (photo.isMain) member.imageUrl = photo.url;
+          if (photo.isMain) {
+            member.imageUrl = photo.url;
+            this.accountService.updateImageUrl(photo.url);
+          }
           this.member.set({ ...member });
         }
         this.toast.success('Photo uploaded');
@@ -107,6 +110,7 @@ export class MemberDetail implements OnInit, OnDestroy {
           member.photos.forEach((p) => (p.isMain = p.id === photoId));
           member.imageUrl = member.photos.find((p) => p.id === photoId)?.url ?? member.imageUrl;
           this.member.set({ ...member });
+          this.accountService.updateImageUrl(member.imageUrl);
         }
         this.toast.success('Main photo updated');
       },

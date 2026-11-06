@@ -14,6 +14,8 @@ public static class AppUserExtensions
       id = user.Id,
       UserName = user.UserName,
       Email = user.Email,
+      // Requires Photos to be loaded (Include) – otherwise null.
+      ImageUrl = user.Photos.FirstOrDefault(p => p.IsMain)?.Url,
       Token = tokenService.CreateToken(user)
     };
   }

@@ -181,6 +181,35 @@ namespace API.Tests.Controllers
     }
 
     [Fact]
+    public async Task Login_WhenUserHasMainPhoto_ReturnsImageUrl()
+    {
+      // Arrange: seed with one context, log in with a fresh one so the
+      // photos are only available if the controller loads them itself.
+      var options = new DbContextOptionsBuilder<AppDbContext>()
+          .UseInMemoryDatabase(Guid.NewGuid().ToString())
+          .Options;
+
+      await using (var seed = new AppDbContext(options))
+      {
+        var user = CreateUser("micha", "micha@test.de", "CorrectPassword");
+        user.Photos.Add(new Photo { Url = "https://example.com/other.jpg", IsMain = false });
+        user.Photos.Add(new Photo { Url = "https://example.com/main.jpg", IsMain = true });
+        seed.Users.Add(user);
+        await seed.SaveChangesAsync();
+      }
+
+      await using var context = new AppDbContext(options);
+      var controller = CreateController(context);
+
+      // Act
+      var result = await controller.Login(new LoginDTO { Email = "micha@test.de", Password = "CorrectPassword" });
+
+      // Assert
+      Assert.NotNull(result.Value);
+      Assert.Equal("https://example.com/main.jpg", result.Value!.ImageUrl);
+    }
+
+    [Fact]
     public async Task Login_WhenValid_ReturnsUserDto()
     {
       // Arrange
