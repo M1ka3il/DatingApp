@@ -1,4 +1,4 @@
-<header class ="p-3 w-full fixed top-0 z-50 bg-gradient-to-black">
+<header class ="p-3 w-full fixed top-0 z-50 bg-neutral">
 <div class="flex align-middle items-center px-10 mx-auto gap-6">
   <a class="flex items-center max-h-16 gap-3 text-white border-r-white border-r-2 pr-6">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -17,7 +17,7 @@
   </nav>
   <div class="flex align-middle ml-auto gap-3">
     @if(loggedIn()){
-      <div class="dropdown-end">
+      <div class="dropdown dropdown-end">
         <div tabindex="0" role="button"
         class="flex items-center text-white text-xl gap-3 cursor-pointer">
           <img [src]="accountService.currentUser()?.imageUrl || '/male_defaultAvatar_vecteezy.jpg'" alt="User Avatar" class="w-8 h-8 rounded-full object-cover">
@@ -43,6 +43,7 @@
         class ="input" 
         placeholder="Password">
       <button type="submit" class="btn">Login</button>
+      <a routerLink="/register" class="btn btn-primary">Register</a>
     </form>   
     }
     </div>
