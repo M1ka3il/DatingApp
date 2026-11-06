@@ -3,5 +3,5 @@ export class UserParams {
   orderBy = 'username';
   direction: 'asc' | 'desc' = 'asc';
   pageNumber = 1;
-  pageSize = 5;
+  pageSize = 8;
 }

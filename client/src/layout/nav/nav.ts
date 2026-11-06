@@ -1,6 +1,6 @@
 import { Component, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { inject } from '@angular/core';
 import { AccountService } from '../../core/services/account-service.service';
 import { ToastService } from '../../core/services/toast-service';
@@ -8,7 +8,7 @@ import { ToastService } from '../../core/services/toast-service';
 @Component({
   selector: 'app-nav',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, RouterLinkActive],
   templateUrl: './nav.html',
   styleUrls: ['./nav.css']
 })

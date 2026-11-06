@@ -1,3 +1,63 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+/* App theme: warm rose/plum palette instead of the neutral daisyUI default. */
+@plugin "daisyui/theme" {
+  name: "dating";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: #ffffff;
+  --color-base-200: #fdf2f6;
+  --color-base-300: #f6dfe8;
+  --color-base-content: #2b1b2e;
+
+  --color-primary: #e11d63;
+  --color-primary-content: #ffffff;
+  --color-secondary: #7c3aed;
+  --color-secondary-content: #ffffff;
+  --color-accent: #f59e0b;
+  --color-accent-content: #2b1b2e;
+  --color-neutral: #2b1b2e;
+  --color-neutral-content: #fdf2f6;
+
+  --color-info: #0284c7;
+  --color-info-content: #ffffff;
+  --color-success: #15803d;
+  --color-success-content: #ffffff;
+  --color-warning: #f59e0b;
+  --color-warning-content: #2b1b2e;
+  --color-error: #dc2626;
+  --color-error-content: #ffffff;
+
+  --radius-selector: 1rem;
+  --radius-field: 0.75rem;
+  --radius-box: 1.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
 @import "ngx-toastr/toastr";
+
+/* Soft rose → lilac backdrop for every page. */
+html {
+  min-height: 100%;
+  background:
+    radial-gradient(60rem 40rem at 10% -10%, #ffe4ee 0%, transparent 60%),
+    radial-gradient(50rem 35rem at 100% 0%, #ede4ff 0%, transparent 55%),
+    linear-gradient(180deg, #fff7fa 0%, #f8f1ff 100%);
+  background-attachment: fixed;
+}
+
+body {
+  background: transparent;
+}
+
+/* Softer separators between list rows (messages). */
+.list > .list-row:not(:last-child)::after {
+  border-color: var(--color-base-300);
+}
