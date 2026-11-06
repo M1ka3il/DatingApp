@@ -13,9 +13,9 @@
 ## 📝 Summary
 
 A small dating app with an **ASP.NET Core Web API** backend and an **Angular** single-page frontend.
-Users can register and log in (JWT), browse other members with search, sorting and pagination,
+Users can register and log in (JWT), browse other members in a photo grid with search, sorting and pagination,
 upload profile photos via drag & drop, and chat with each other in real time via **SignalR** –
-including a live online indicator.
+including a live online indicator. The UI uses a custom rose/plum theme and works on desktop, tablet and phone.
 
 ![Member list](docs/screenshots/members.png)
 
@@ -24,6 +24,14 @@ including a live online indicator.
 | ![Register](docs/screenshots/register.png) | ![Own profile](docs/screenshots/own-profile.png) |
 | **Live chat with online status** | **Messages (Inbox / Outbox / Unread)** |
 | ![Member detail with chat](docs/screenshots/member-detail.png) | ![Messages](docs/screenshots/messages.png) |
+
+**On the phone**
+
+<p>
+  <img src="docs/screenshots/mobile-members.png" alt="Member grid on a phone" width="260">
+  &nbsp;
+  <img src="docs/screenshots/mobile-menu.png" alt="Mobile menu" width="260">
+</p>
 
 <sub>Screenshots use generated placeholder avatars and sample data.</sub>
 
@@ -54,10 +62,11 @@ Open http://localhost:4200, click **Register** in the top bar and create your fi
 ## ✨ Features
 
 - **Accounts** – registration & login, JWT auth (HMACSHA512 password hashing), session kept in localStorage
-- **Members** – list with username search, A–Z / Z–A sorting and server-side pagination; member detail page
+- **Members** – photo grid with username search, A–Z / Z–A sorting and server-side pagination; member detail page
 - **Photos** – drag & drop upload (jpg/png/gif/webp, max 10 MB), set main photo, delete
 - **Messaging** – private messages with Inbox / Outbox / Unread views
 - **Real-time** – SignalR hubs for online presence and live chat threads
+- **UI** – custom daisyUI theme, responsive layout with a mobile menu below 1024 px
 - **Error handling** – global API exception middleware, Angular error interceptor with toasts and error pages
 - **Tests** – xUnit tests for the Account and Members controllers
 
