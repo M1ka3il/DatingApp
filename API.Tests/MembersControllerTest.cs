@@ -3,6 +3,7 @@ using API.Data;
 using API.DTO;
 using API.Entities;
 using API.Helpers;
+using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,14 @@ using Xunit;
 
 public class MembersControllerTests
 {
+    private sealed class FakeFileStorage : IFileStorageService
+    {
+        public Task<FileStorageResult> SaveAsync(IFormFile file, string requestOrigin)
+            => Task.FromResult(new FileStorageResult($"{requestOrigin}/uploads/fake.jpg", null));
+
+        public Task DeleteAsync(string url, string? publicId) => Task.CompletedTask;
+    }
+
     private static AppDbContext CreateContext(string dbName)
     {
         var options = new DbContextOptionsBuilder<AppDbContext>()
@@ -31,7 +40,7 @@ public class MembersControllerTests
 
     private static MembersController CreateController(AppDbContext context)
     {
-        return new MembersController(context, CreateMapper())
+        return new MembersController(context, CreateMapper(), new FakeFileStorage())
         {
             // GetMembers writes a pagination header, which needs a response.
             ControllerContext = new ControllerContext
@@ -86,7 +95,7 @@ public class MembersControllerTests
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        var controller = new MembersController(context, CreateMapper());
+        var controller = CreateController(context);
 
         // Act
         ActionResult<MemberDTO> result = await controller.GetMemberByID(id);
@@ -102,7 +111,7 @@ public class MembersControllerTests
     {
         // Arrange
         await using var context = CreateContext(nameof(GetMemberByID_WhenMissing_ReturnsNotFound));
-        var controller = new MembersController(context, CreateMapper());
+        var controller = CreateController(context);
 
         // Act
         ActionResult<MemberDTO> result = await controller.GetMemberByID(Guid.NewGuid());
