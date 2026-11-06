@@ -12,26 +12,51 @@
 
 ## 📝 Summary
 
-A small dating app with an **ASP.NET Core Web API** backend and an **Angular** single-page frontend.
+A full-stack dating app with an **ASP.NET Core Web API** backend and an **Angular** single-page frontend.
 Users can register and log in (JWT), browse other members in a photo grid with search, sorting and pagination,
 upload profile photos via drag & drop, and chat with each other in real time via **SignalR** –
 including a live online indicator. The UI uses a custom rose/plum theme and works on desktop, tablet and phone.
 
-![Member list](docs/screenshots/members.png)
-
-| Register | Profile & photo upload |
-|---|---|
-| ![Register](docs/screenshots/register.png) | ![Own profile](docs/screenshots/own-profile.png) |
-| **Live chat with online status** | **Messages (Inbox / Outbox / Unread)** |
-| ![Member detail with chat](docs/screenshots/member-detail.png) | ![Messages](docs/screenshots/messages.png) |
-
-**On the phone**
-
-<p>
-  <img src="docs/screenshots/mobile-members.png" alt="Member grid on a phone" width="260">
-  &nbsp;
-  <img src="docs/screenshots/mobile-menu.png" alt="Mobile menu" width="260">
+<p align="center">
+  <img src="docs/screenshots/members.png" alt="Member grid with search, sorting and online indicators">
+  <br><b>Members</b>
 </p>
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/register.png" alt="Registration form with validation">
+      <br><b>Register</b>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/own-profile.png" alt="Own profile with photo gallery and drag-and-drop upload">
+      <br><b>Profile &amp; photo upload</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/member-detail.png" alt="Member profile with live chat thread">
+      <br><b>Live chat with online status</b>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/messages.png" alt="Messages inbox with unread badges">
+      <br><b>Messages (Inbox / Outbox / Unread)</b>
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="docs/screenshots/mobile-members.png" alt="Member grid on a phone" width="260">
+      <br><b>Phone</b>
+    </td>
+    <td align="center">
+      <img src="docs/screenshots/mobile-menu.png" alt="Mobile navigation menu opened" width="260">
+      <br><b>Mobile menu</b>
+    </td>
+  </tr>
+</table>
 
 <sub>Screenshots use generated placeholder avatars and sample data.</sub>
 
