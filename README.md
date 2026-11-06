@@ -79,6 +79,16 @@ Open http://localhost:4200, click **Register** in the top bar and create your fi
 | Data | Entity Framework Core 9 (code first), SQLite |
 | Testing | xUnit, EF Core InMemory |
 
+## 🤖 How this project was built
+
+I started this project by hand while learning ASP.NET Core and Angular: project setup,
+authentication, the first API endpoints and the basic Angular structure.
+
+Later features and refactorings were built with an AI coding assistant (Claude Code):
+photo upload, messaging & SignalR, the registration form, the UI theme and the responsive layout.
+I defined the requirements, reviewed designs and code, tested the results and decided what gets merged.
+Commits created with the assistant are marked with `Co-Authored-By`.
+
 ## 🚀 Next steps
 
 **Dating features**
