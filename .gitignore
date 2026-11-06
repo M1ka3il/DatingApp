@@ -30,3 +30,7 @@ API/appsettings.json
 API/dating.db*
 .github/*
 
+# Uploaded photos (keep the folder, ignore contents)
+API/wwwroot/uploads/*
+!API/wwwroot/uploads/.gitkeep
+

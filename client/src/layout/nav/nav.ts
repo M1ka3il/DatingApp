@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { inject } from '@angular/core';
@@ -13,17 +13,15 @@ import { ToastService } from '../../core/services/toast-service';
   styleUrls: ['./nav.css']
 })
 export class Nav {
-  private accountService = inject(AccountService);
+  protected accountService = inject(AccountService);
   private toast = inject(ToastService);
   protected creds: any = {}
-  protected loggedIn = signal(false);
-
+  protected loggedIn = computed(() => !!this.accountService.currentUser());
 
   login()
   {
     this.accountService.login(this.creds).subscribe({
       next: () => {
-        this.loggedIn.set(true);
         this.creds = {};
         this.toast.success('Logged in successfully');
       },
@@ -33,7 +31,7 @@ export class Nav {
 
   logout()
   {
-    this.loggedIn.set(false);
+    this.accountService.logout();
     this.toast.info('Logged out');
   }
 }
