@@ -1,0 +1,101 @@
+<div class="flex justify-center px-4 pt-28 pb-10">
+  <form
+    [formGroup]="form"
+    (ngSubmit)="register()"
+    novalidate
+    class="card bg-base-100 w-full max-w-md p-10 shadow-xl flex flex-col gap-5">
+    <div class="flex flex-col gap-1">
+      <h1 class="text-3xl font-bold">Create your account</h1>
+      <p class="text-base-content/70">Sign up to browse members and start chatting.</p>
+    </div>
+
+    @if (serverErrors().length > 0) {
+      <div role="alert" class="alert alert-error alert-soft text-rose-800">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="size-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <path stroke-linecap="round" d="M12 8v4M12 16h.01" />
+        </svg>
+        <ul>
+          @for (message of serverErrors(); track $index) {
+            <li>{{ message }}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <div class="flex flex-col gap-1">
+      <label for="reg-username" class="text-sm font-semibold">Username</label>
+      <input
+        id="reg-username"
+        formControlName="userName"
+        type="text"
+        autocomplete="username"
+        class="input w-full"
+        [class.input-error]="showError('userName')">
+      @if (showError('userName')) {
+        <span class="text-sm text-rose-700">Username is required.</span>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="reg-email" class="text-sm font-semibold">Email</label>
+      <input
+        id="reg-email"
+        formControlName="email"
+        type="email"
+        autocomplete="email"
+        class="input w-full"
+        [class.input-error]="showError('email')">
+      @if (showError('email')) {
+        <span class="text-sm text-rose-700">Please enter a valid email address.</span>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="reg-password" class="text-sm font-semibold">Password</label>
+      <input
+        id="reg-password"
+        formControlName="password"
+        type="password"
+        autocomplete="new-password"
+        class="input w-full"
+        [class.input-error]="showError('password')">
+      @if (showError('password')) {
+        <span class="text-sm text-rose-700">Password must be at least 6 characters long.</span>
+      } @else {
+        <span class="text-sm text-base-content/70">At least 6 characters.</span>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="reg-confirm" class="text-sm font-semibold">Confirm password</label>
+      <input
+        id="reg-confirm"
+        formControlName="confirmPassword"
+        type="password"
+        autocomplete="new-password"
+        placeholder="Repeat your password"
+        class="input w-full"
+        [class.input-error]="showError('confirmPassword') || showMismatch()">
+      @if (showMismatch()) {
+        <span class="text-sm text-rose-700">Passwords do not match.</span>
+      } @else if (showError('confirmPassword')) {
+        <span class="text-sm text-rose-700">Please confirm your password.</span>
+      }
+    </div>
+
+    <div class="flex gap-3 mt-1">
+      <button type="submit" class="btn btn-primary flex-1" [disabled]="submitting() || (form.invalid && form.touched)">
+        @if (submitting()) {
+          <span class="loading loading-spinner loading-sm"></span>
+        }
+        Create account
+      </button>
+      <button type="button" class="btn" (click)="cancel()">Cancel</button>
+    </div>
+
+    <p class="text-sm text-center text-base-content/70">
+      Already have an account? Log in with the fields in the top bar.
+    </p>
+  </form>
+</div>

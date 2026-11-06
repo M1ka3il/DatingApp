@@ -30,10 +30,32 @@
 - [x] Photo upload with drag & drop (local storage in `wwwroot/uploads`, set main photo, delete)
 - [x] Private messaging system
 - [x] Real-time presence and messaging with SignalR
-- [ ] Registration form in the Angular client (API + `AccountService.register()` exist, UI missing)
+- [x] Registration form in the Angular client (`/register`, reactive form with validation)
 - [ ] Route guards for authenticated pages
 - [ ] Cloud storage for photos (e.g. Cloudinary – swap `LocalFileStorageService` via `IFileStorageService`)
 - [ ] Deployment-ready configuration (production settings, CORS, serving the SPA)
+
+---
+
+## ▶️ Quick start
+
+Prerequisites: [.NET 9 SDK](https://dotnet.microsoft.com/download) and [Node.js](https://nodejs.org/) (LTS).
+
+```bash
+# 1) API – https://localhost:5001 (the SQLite database is created automatically on first start)
+cd API
+dotnet dev-certs https --trust
+dotnet run --launch-profile https
+```
+
+```bash
+# 2) Client – http://localhost:4200
+cd client
+npm install
+npm start
+```
+
+Open http://localhost:4200, click **Register** in the top bar and create your first account.
 
 ---
 
@@ -64,6 +86,7 @@
 - `api/buggy/*` endpoints to test the error-handling pipeline
 
 **Client**
+- Registration page (`/register`) with client-side validation and server error display
 - Login / logout in the navbar, session persisted in localStorage, JWT attached by interceptor
 - Member list with search, A–Z / Z–A sorting and pagination
 - Member detail page with drag & drop photo upload, main-photo selection and deletion
@@ -75,7 +98,6 @@
 
 ## 🚀 Features (planned)
 
-- 🔜 Registration form in the client
 - 🔜 Route guards
 - 🔜 Cloud storage for photos
 - 🔜 Deployment-ready configuration
