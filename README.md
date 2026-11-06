@@ -72,6 +72,14 @@ Open http://localhost:4200, click **Register** in the top bar and create your fi
 
 ## 🚀 Next steps
 
+**Dating features**
+- **Swiping** – card stack of profiles, swipe right to like / left to pass
+- **Matches** – mutual likes become a match; the *Lists* page shows likes, liked-by and matches
+- **Interests & hobbies** – pick interests on your profile, show them on the member card, filter members by shared interests
+- **Richer profiles & editing** – bio, age, city, gender and "looking for"; wire up the *Edit Profile* menu entry
+- **Discovery filters** – filter by age range, gender and distance
+
+**Technical**
 - Route guards for authenticated pages
 - Cloud storage for photos (e.g. Cloudinary – swap `LocalFileStorageService` via `IFileStorageService`)
 - Deployment-ready configuration (production settings, CORS, serving the SPA)

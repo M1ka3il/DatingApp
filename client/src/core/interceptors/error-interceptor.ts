@@ -1,8 +1,12 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpContextToken, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { ToastService } from '../services/toast-service';
+
+// Set on a request whose caller shows 400/401 errors itself (register form, login),
+// so the user doesn't get the same message twice.
+export const SKIP_ERROR_TOAST = new HttpContextToken<boolean>(() => false);
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
@@ -22,12 +26,14 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
                 }
               }
               throw modelStateErrors.flat();
-            } else {
+            } else if (!req.context.get(SKIP_ERROR_TOAST)) {
               toast.error(error.error, error.status);
             }
             break;
           case 401:
-            toast.error('Unauthorised', error.status);
+            if (!req.context.get(SKIP_ERROR_TOAST)) {
+              toast.error('Unauthorised', error.status);
+            }
             break;
           case 404:
             router.navigateByUrl('/not-found');
